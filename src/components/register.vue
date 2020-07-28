@@ -6,8 +6,6 @@
 export default {
 
 }
-
-console.log('----------------------->enter in register')
 </script>
 <style scoped>
 </style>
