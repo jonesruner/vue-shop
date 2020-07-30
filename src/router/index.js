@@ -10,6 +10,23 @@ export default new VueRouter({
     { path: '/', redirect: '/login' },
     { path: '/login', name: 'Login', component: Login },
     { path: '/register', name: 'Register', component: Register },
-    { path: '/home', name: 'Home', component: Home }
+    {
+      path: '/home',
+      name: 'Home',
+      component: Home,
+      redirect: '/welcome',
+      children: [
+        {
+          path: '/welcome',
+          name: 'welcome',
+          component: () => import('../components/welcome.vue')
+        },
+        {
+          path: '/users',
+          name: 'users',
+          component: () => import('../components/user/user.vue')
+        }
+      ]
+    }
   ]
 })

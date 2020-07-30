@@ -6,6 +6,12 @@ import './plugins/element'
 
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+axios.interceptors.request.use(config => {
+  // 为请求头添加token
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
+
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
@@ -14,7 +20,12 @@ router.beforeEach((to, from, next) => {
   // to 表示将要访问的路径
   // from 表示从哪个路劲跳转过来的
   // next 是一个放行函数
-  if (to.path === '/login') return next()
+  if (to.path === '/login') {
+    if (window.sessionStorage.getItem('token') !== null) {
+      return next('/home')
+    }
+    return next()
+  }
   const token = window.sessionStorage.getItem('token')
   if (!token) return next('/login')
   next()
