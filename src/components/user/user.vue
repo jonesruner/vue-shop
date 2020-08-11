@@ -44,7 +44,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="140">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
             <el-tooltip
@@ -92,7 +92,8 @@
                 size="mini"
                 type="warning"
                 icon="el-icon-setting"
-                circle
+                circleu456ho4q5jy90q2456u90="yui90-52"
+                @click="showDeployRoles(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -182,6 +183,34 @@
       </span>
     </el-dialog>
     <!-- 修改用户信息 dialog 结束 -->
+
+    <!-- 分配角色对话框开始 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="setRoleDialogVisible"
+      width="50%"
+    >
+      <div>
+        <p>当前的用户: {{ deployUserInfo.username }}</p>
+        <p>当前的角色: {{ deployUserInfo.role_name }}</p>
+        <p>
+          分配新角色:
+          <el-select v-model="select" slot="prepend" placeholder="请选择">
+            <el-option
+              :label="role.roleName"
+              :value="role.id"
+              :key="role.id"
+              v-for="role in roleList"
+            ></el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveDeployRoles">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 分配角色对话框结束 -->
   </div>
 </template>
 <script>
@@ -198,6 +227,11 @@ export default {
       callback(new Error('请输入合法手机号！'))
     }
     return {
+      roleList: [],
+      select: '',
+      deployUserInfo: {},
+      // 控制分配角色对话框是否显示
+      setRoleDialogVisible: false,
       queryInfo: {
         query: '',
         pagenum: 1,
@@ -245,13 +279,34 @@ export default {
     this.getUserList()
   },
   methods: {
+    // 显示分配角色对话框
+    async showDeployRoles (user) {
+      this.select = ''
+      this.deployUserInfo = user
+      const { data: result } = await this.$http.get('roles')
+      console.log(result)
+      if (result.meta.status !== 200) return this.$MSG.error('获取角色失败！！')
+      this.roleList = result.data
+      this.setRoleDialogVisible = true
+    },
+    async saveDeployRoles () {
+      if (!this.select) return this.$MSG.info('请选择分配角色！！！')
+      const { data: result } = await this.$http.put(
+        `users/${this.deployUserInfo.id}/role`,
+        {
+          rid: this.select
+        }
+      )
+      if (result.meta.status !== 200) return this.$MSG.error('分配角色失败')
+      this.$MSG.success('分配角色成功')
+      this.getUserList()
+      this.setRoleDialogVisible = false
+    },
     // 监听用户状态改变的方法
     async onSwithChange (userInfo) {
-      console.log(userInfo)
       const { data: result } = await this.$http.put(
         `users/${userInfo.id}/state/${userInfo.mg_state}`
       )
-
       if (result.meta.status !== 200) {
         userInfo.mg_state = !userInfo.mg_state
         return this.$MSG.error('更新用户状态失败')

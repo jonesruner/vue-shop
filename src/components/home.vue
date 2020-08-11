@@ -15,10 +15,10 @@
     <!-- 主体内容开始 -->
     <el-container>
       <!-- 侧边栏开始 -->
-      <el-aside :width="isCollapse ?  '56px' : '200px'">
+      <el-aside :width="isCollapse ? '56px' : '200px'">
         <div class="collapse-button" @click="toggleCollapse">
-        |||
-      </div>
+          |||
+        </div>
         <el-menu
           background-color="#333744"
           text-color="#fff"
@@ -39,8 +39,8 @@
               <span>{{ item.authName }}</span>
             </template>
             <el-menu-item
-              :index="'/'+cd.path"
-              @click="saveActivePath('/'+cd.path)"
+              :index="'/' + cd.path"
+              @click="saveActivePath('/' + cd.path)"
               v-for="cd in item.children"
               :key="cd.id"
             >
@@ -92,7 +92,7 @@ export default {
     },
     async getMenuList () {
       const { data: result } = await this.$http.get('menus')
-      console.log(result)
+      // console.log(result)
       if (result.meta.status !== 200) return this.$MSG.error(result.meta.msg)
       this.menuList = result.data
     },
@@ -129,8 +129,8 @@ export default {
 
   .el-aside {
     background-color: #333744;
-    .collapse-button{
-      background-color: #4A5064;
+    .collapse-button {
+      background-color: #4a5064;
       text-align: center;
       font-size: 10px;
       line-height: 24px;

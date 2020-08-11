@@ -25,6 +25,16 @@ export default new VueRouter({
           path: '/users',
           name: 'users',
           component: () => import('../components/user/user.vue')
+        },
+        {
+          path: '/rights',
+          name: 'permissions',
+          component: () => import('../components/permissions/rights.vue')
+        },
+        {
+          path: '/roles',
+          name: 'roles',
+          component: () => import('../components/permissions/roles.vue')
         }
       ]
     }
