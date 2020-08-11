@@ -67,7 +67,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="scope"
+              @click="showEditRolesDialog(scope.row)"
               icon="el-icon-edit"
               type="primary"
               >编辑
@@ -126,10 +126,10 @@
       <!-- 内容主体 -->
       <span>
         <el-form
-          label-width="70px"
+          label-width="100px"
           :model="addRolesForm"
           ref="addRolesRef"
-          :rule="addRolesRule"
+          :rules="addRolesRule"
         >
           <el-form-item label="角色名称" prop="roleName">
             <el-input v-model="addRolesForm.roleName"></el-input>
@@ -145,18 +145,57 @@
         <el-button type="primary" @click="addRole">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 编辑角色dialog 开始 -->
+    <el-dialog
+      title="编辑角色"
+      :visible.sync="editRolesDialogVisible"
+      width="50%"
+    >
+      <!-- 内容主体 -->
+      <span>
+        <el-form
+          label-width="100px"
+          :model="editRolesForm"
+          ref="editRolesRef"
+          :rules="addRolesRule"
+        >
+          <el-form-item label="角色ID" prop="roleName">
+            <el-input v-model="editRolesForm.id" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="角色名称" prop="roleName">
+            <el-input v-model="editRolesForm.roleName"></el-input>
+          </el-form-item>
+          <el-form-item label="角色描述" prop="roleDesc">
+            <el-input v-model="editRolesForm.roleDesc"></el-input>
+          </el-form-item>
+        </el-form>
+      </span>
+      <!-- 脚步 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editRolesDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitEditRole">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  created() {
+  created () {
     this.getRoleList()
   },
-  data() {
+  data () {
     return {
+      opratorRole: {},
+      editRolesDialogVisible: false,
       addRolesDialogVisible: false,
       addRolesForm: {
+        roleDesc: '',
+        roleName: ''
+      },
+      editRolesForm: {
+        id: '',
         roleDesc: '',
         roleName: ''
       },
@@ -193,11 +232,59 @@ export default {
     }
   },
   methods: {
-    showAddRolesDialog() {
+    // 显示编辑角色信息对话框
+    showEditRolesDialog (role) {
+      this.editRolesDialogVisible = true
+      this.editRolesForm.id = role.id
+      this.editRolesForm.roleDesc = role.roleDesc
+      this.editRolesForm.roleName = role.roleName
+      this.opratorRole = role
+    },
+    async submitEditRole () {
+      this.$refs.editRolesRef.validate(async valid => {
+        if (!valid) return this.$MSG.info('请根据提示输入指定参数！！！')
+        const { data: result } = await this.$http.put(
+          `roles/${this.editRolesForm.id}`,
+          this.editRolesForm
+        )
+        if (result.meta.status !== 200) {
+          return this.$MSG.error('编辑角色信息失败！！！')
+        }
+
+        this.$MSG.success('编辑角色信息成功')
+        this.editRolesForm.roleName = ''
+        this.editRolesForm.id = ''
+        this.editRolesForm.roleDesc = ''
+        this.editRolesDialogVisible = false
+        this.opratorRole.roleDesc = result.data.roleDesc
+        this.opratorRole.roleName = result.data.roleName
+      })
+    },
+    // 显示添加角色对话框
+    showAddRolesDialog () {
       this.addRolesDialogVisible = true
     },
-    async addRole() {},
-    async removeRolesByID(role) {
+    // 添加角色
+    async addRole () {
+      this.$refs.addRolesRef.validate(async valid => {
+        console.log(valid)
+        if (!valid) return this.$MSG.info('请根据提示输入指定参数！！！')
+        const { data: result } = await this.$http.post(
+          'roles',
+          this.addRolesForm
+        )
+        console.log(result, 111111111111111)
+        if (result.meta.status !== 201) {
+          return this.$MSG.error('添加角色失败！！！')
+        }
+        this.roleList.push(result.data)
+        this.$MSG.success('添加角色成功')
+        this.addRolesForm.roleName = ''
+        this.addRolesForm.roleDesc = ''
+        this.addRolesDialogVisible = false
+      })
+    },
+    async removeRolesByID (role) {
       console.log(role)
       this.$confirm(`此操作将永久删除角色${role.roleName}, 是否继续?`, '提示', {
         confirmButtonText: '确定',
@@ -223,7 +310,7 @@ export default {
         })
     },
     // 分配权限
-    async showSetPermissionDialog(role) {
+    async showSetPermissionDialog (role) {
       // 获取全部权限
       const { data: result } = await this.$http.get('rights/tree')
       if (result.meta.status !== 200) {
@@ -237,7 +324,7 @@ export default {
       this.roleId = role.id
       this.permisionSetDialogVisible = true
     },
-    async getRoleList() {
+    async getRoleList () {
       const { data: result } = await this.$http.get('roles')
       console.log(result)
       if (result.meta.status !== 200) {
@@ -245,7 +332,7 @@ export default {
       }
       this.roleList = result.data
     },
-    async removePermisionById(role, permission) {
+    async removePermisionById (role, permission) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -265,7 +352,7 @@ export default {
         })
     },
     // 以递归的方式获取全部三级权限
-    getLeafPermission(node, arr) {
+    getLeafPermission (node, arr) {
       // 如果当前node是三级权限节点
       if (node.children === null || node.children === undefined) {
         arr.push(node.id)
@@ -275,7 +362,7 @@ export default {
         this.getLeafPermission(e, arr)
       })
     },
-    async submitAllPermission() {
+    async submitAllPermission () {
       const checkKeys = [
         ...this.$refs.refPermissionTree.getCheckedKeys(),
         ...this.$refs.refPermissionTree.getHalfCheckedKeys()

@@ -35,6 +35,21 @@ export default new VueRouter({
           path: '/roles',
           name: 'roles',
           component: () => import('../components/permissions/roles.vue')
+        },
+        {
+          path: '/categories',
+          name: 'categories',
+          component: () => import('../components/goods/cate.vue')
+        },
+        {
+          path: '/goods',
+          name: 'goods',
+          component: () => import('../components/goods/good_list.vue')
+        },
+        {
+          path: '/params',
+          name: 'params',
+          component: () => import('../components/goods/categories_params.vue')
         }
       ]
     }
