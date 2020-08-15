@@ -236,18 +236,8 @@ export default {
 }
 </script>
 
-<style lang="less" >
+<style lang="less">
 .zk-table {
   margin-top: 20px;
-}
-
-div.el-cascader__dropdown {
-   top:150px!important;
-   bottom:150px!important;
-   overflow:hidden!important;
-}
-
-div.el-cascader-panel {
-  height:100%!important;
 }
 </style>
