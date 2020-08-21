@@ -34,3 +34,12 @@ div.el-cascader__dropdown {
 div.el-cascader-panel {
   height: 100% !important;
 }
+.el-step__title {
+  font-size: 13px;
+}
+.el-steps {
+  margin: 15px 0;
+}
+.ql-editor {
+  min-height: 300px;
+}

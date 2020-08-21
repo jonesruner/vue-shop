@@ -4,8 +4,15 @@ import router from './router'
 import store from './store'
 import './plugins/element'
 
+// editor 富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+// 树形表格
 import TreeTable from 'vue-table-with-tree-grid'
 
+import _ from 'lodash'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
@@ -18,6 +25,23 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 // 引入tree-table控件
 Vue.component('tree-table', TreeTable)
+Vue.use(VueQuillEditor /* { default global options } */)
+
+// 日期格式转换
+Vue.filter('dateFormat', function(originVal) {
+  const dt = new Date(1000 * originVal)
+  const year = dt.getFullYear()
+  const month = (dt.getMonth() + 1 + '').padStart(2, '0')
+  const day = (dt.getDate() + '').padStart(2, '0')
+  const hour = (dt.getHours() + '').padStart(2, '0')
+  const minutes = (dt.getMinutes() + '').padStart(2, '0')
+  const seconds = (dt.getSeconds() + '').padStart(2, '0')
+  return `${year}-${month}-${day}  ${hour}:${minutes}:${seconds}`
+})
+// 请求连接过滤
+Vue.filter('requestUrl', function(originVal) {
+  return axios.defaults.baseURL + originVal
+})
 
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {

@@ -50,6 +50,11 @@ export default new VueRouter({
           path: '/params',
           name: 'params',
           component: () => import('../components/goods/categories_params.vue')
+        },
+        {
+          path: '/add',
+          name: 'add',
+          component: () => import('../components/goods/add.vue')
         }
       ]
     }
