@@ -60,6 +60,11 @@ export default new VueRouter({
           path: '/orders',
           name: 'orders',
           component: () => import('../components/order/order.vue')
+        },
+        {
+          path: '/reports',
+          name: 'report',
+          component: () => import('../components/report/report.vue')
         }
       ]
     }
