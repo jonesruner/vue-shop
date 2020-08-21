@@ -135,7 +135,7 @@
 <script>
 import cityData from './citydata'
 export default {
-  data() {
+  data () {
     return {
       cityData: cityData,
       pageSizes: [8, 15, 20, 30],
@@ -156,52 +156,50 @@ export default {
         pagenum: 1,
         pagesize: 8
       },
-      orderList: [], //订单猎豹
-      total: 0, //订单总计
+      orderList: [], // 订单猎豹
+      total: 0, // 订单总计
       editDialogVisible: false,
       progressDialogVisible: false,
       progressInfo: []
     }
   },
-  created() {
-    this.getOrderList() //获取订单列表
+  created () {
+    this.getOrderList() // 获取订单列表
   },
   methods: {
-    async getOrderList() {
+    async getOrderList () {
       const { data: result } = await this.$http.get('orders', {
         params: this.queryInfo
       })
-      if (result.meta.status !== 200)
-        return this.$MSG.error('获取订单列表数据失败！')
+      if (result.meta.status !== 200) { return this.$MSG.error('获取订单列表数据失败！') }
 
       this.total = result.data.total
       this.orderList = result.data.goods
     },
-    showEditDialog(item) {
+    showEditDialog (item) {
       this.editDialogVisible = true
     },
-    closeEditDialog(item) {
+    closeEditDialog (item) {
       this.$refs.editFormRef.resetFields()
     },
-    async showProgressDialog(item) {
+    async showProgressDialog (item) {
       const { data: result } = await this.$http.get('/kuaidi/1106975712662')
-      if (result.meta.status !== 200)
-        return this.$MSG.error('获取物流信息失败！！！')
+      if (result.meta.status !== 200) { return this.$MSG.error('获取物流信息失败！！！') }
       this.progressInfo = result.data
       this.progressDialogVisible = true
     },
-    closeProgressDialog(item) {
+    closeProgressDialog (item) {
       //   this.$refs.progressFormRef.resetFields()
     },
-    handleCurrentChange(newpage) {
+    handleCurrentChange (newpage) {
       this.queryInfo.pagenum = newpage
       this.getOrderList()
     },
-    handleSizeChange(newsize) {
+    handleSizeChange (newsize) {
       this.queryInfo.pagesize = newsize
       this.getOrderList()
     },
-    editOrder() {}
+    editOrder () {}
   }
 }
 </script>

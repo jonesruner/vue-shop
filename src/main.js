@@ -12,15 +12,23 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 // 树形表格
 import TreeTable from 'vue-table-with-tree-grid'
 
-import _ from 'lodash'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+// 在request 拦截器中，展示进度条NProgress.start
 axios.interceptors.request.use(config => {
   // 为请求头添加token
   config.headers.Authorization = window.sessionStorage.getItem('token')
+  NProgress.start()
   return config
 })
-
+// response 拦截器中，隐藏进度条NProgress.done
+axios.interceptors.response.use(config => {
+  NProgress.done()
+  NProgress.remove()
+  return config
+})
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 // 引入tree-table控件
@@ -28,7 +36,7 @@ Vue.component('tree-table', TreeTable)
 Vue.use(VueQuillEditor /* { default global options } */)
 
 // 日期格式转换
-Vue.filter('dateFormat', function(originVal) {
+Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(1000 * originVal)
   const year = dt.getFullYear()
   const month = (dt.getMonth() + 1 + '').padStart(2, '0')
@@ -39,7 +47,7 @@ Vue.filter('dateFormat', function(originVal) {
   return `${year}-${month}-${day}  ${hour}:${minutes}:${seconds}`
 })
 // 请求连接过滤
-Vue.filter('requestUrl', function(originVal) {
+Vue.filter('requestUrl', function (originVal) {
   return axios.defaults.baseURL + originVal
 })
 

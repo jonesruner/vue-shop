@@ -143,19 +143,20 @@
   </div>
 </template>
 <script>
+import _ from 'lodash'
 export default {
-  data() {
+  data () {
     return {
       headersObj: {
         Authorization: window.sessionStorage.getItem('token')
       },
-      previewVisible: false, //预览对话框
-      catList: [], //商品分类信息
-      activeIndex: '0', //激活的步骤索引号,
-      manyTableData: {}, //商品参数数据
-      onlyTableData: {}, //商品属性数据
-      goodFileList: [], //图片数组
-      previewPath: {}, //预览图片
+      previewVisible: false, // 预览对话框
+      catList: [], // 商品分类信息
+      activeIndex: '0', // 激活的步骤索引号,
+      manyTableData: {}, // 商品参数数据
+      onlyTableData: {}, // 商品属性数据
+      goodFileList: [], // 图片数组
+      previewPath: {}, // 预览图片
       cateProps: {
         label: 'cat_name',
         value: 'cat_id',
@@ -167,11 +168,11 @@ export default {
         goods_price: 0,
         goods_weight: 0,
         goods_number: 0,
-        goods_cat: [1, 3, 6], //商品所属分类数组
+        goods_cat: [1, 3, 6], // 商品所属分类数组
         pics: [],
         goods_introduce: '',
         attrs: []
-      }, //添加表单
+      }, // 添加表单
       addFormRules: {
         goods_name: [
           { required: true, message: '请输入商品名称', trigger: 'blur' }
@@ -188,36 +189,37 @@ export default {
         goods_cat: [
           { required: true, message: '请选择商品分类', trigger: 'blur' }
         ]
-      } //添加表单 规则
+      } // 添加表单 规则
     }
   },
-  created() {
+  created () {
     this.getCateList()
   },
   methods: {
     // 获取所有商品分类数据
-    async getCateList() {
+    async getCateList () {
       const { data: result } = await this.$http.get('categories')
-      if (result.meta.status !== 200)
+      if (result.meta.status !== 200) {
         return this.$MSG.error('获取商品分类数据失败')
+      }
       console.log(result.data)
       this.catList = result.data
     },
     // 处理基本信息 层连选择器
-    handleChange(val) {
+    handleChange (val) {
       if (this.addForm.goods_cat.length !== 3) {
         this.addForm.goods_cat = []
       }
       console.log(val)
     },
-    beforeTabLeave(newActiveName, oldActiveName) {
+    beforeTabLeave (newActiveName, oldActiveName) {
       console.log(newActiveName, oldActiveName)
       if (this.activeIndex === '0' && this.addForm.goods_cat.length !== 3) {
         this.$MSG.error('请先选择商品分类！')
         return false
       }
     },
-    async tabClicked() {
+    async tabClicked () {
       // console.log(this.activeIndex)
       // 访问动态参数面板
       switch (this.activeIndex) {
@@ -230,8 +232,9 @@ export default {
               }
             }
           )
-          if (resultMany.meta.status !== 200)
+          if (resultMany.meta.status !== 200) {
             return this.$MSG.error('获取动态参数列表失败！')
+          }
           resultMany.data.forEach(item => {
             item.attr_vals =
               item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
@@ -248,8 +251,9 @@ export default {
               }
             }
           )
-          if (resultOnly.meta.status !== 200)
+          if (resultOnly.meta.status !== 200) {
             return this.$MSG.error('获取属性列表失败！')
+          }
           // resultOnly.data.forEach(item => {
           //   item.attr_vals =
           //     item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
@@ -262,27 +266,27 @@ export default {
       }
     },
     // 文件列表移除文件时
-    handleRemove(file, fileList) {
+    handleRemove (file, fileList) {
       const path = file.response.data.tmp_path
       const index = this.addForm.pics.findIndex(x => {
-        path === x.pic
+        x.pic === path
       })
       this.addForm.pics.splice(index, 1)
       console.log(file, fileList)
     },
     // 点击文件列表中已上传的文件时
-    handlePreview(file) {
+    handlePreview (file) {
       console.log(file)
       this.previewPath = file.response.data.url
       this.previewVisible = true
     },
     // 图片上传成功的处理函数
-    handleSuccess(response) {
+    handleSuccess (response) {
       this.addForm.pics.push({
         pics: response.data.tmp_path
       })
     },
-    async add() {
+    async add () {
       let isValide = false
       this.$refs.addFormRef.validate(valide => {
         isValide = valide
@@ -307,14 +311,15 @@ export default {
       console.log(form)
       // 发起请求添加商品
       const { data: result } = await this.$http.post('goods', form)
-      if (result.meta.status !== 201)
+      if (result.meta.status !== 201) {
         return this.$MSG.error('添加商品失败！！！')
+      }
       this.$MSG.success('添加商品失败成功')
       this.$router.push('goods')
     }
   },
   computed: {
-    cateID() {
+    cateID () {
       return this.addForm.goods_cat.length === 3
         ? this.addForm.goods_cat[2]
         : null
