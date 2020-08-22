@@ -40,7 +40,7 @@ export default {
       const { data: result } = await this.$http.get('rights/list')
       console.log(result)
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取权限列表失败!!!')
+        return this.$message.error('获取权限列表失败!!!')
       }
       this.rightList = result.data
     }

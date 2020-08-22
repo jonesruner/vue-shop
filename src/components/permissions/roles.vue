@@ -242,16 +242,16 @@ export default {
     },
     async submitEditRole () {
       this.$refs.editRolesRef.validate(async valid => {
-        if (!valid) return this.$MSG.info('请根据提示输入指定参数！！！')
+        if (!valid) return this.$message.info('请根据提示输入指定参数！！！')
         const { data: result } = await this.$http.put(
           `roles/${this.editRolesForm.id}`,
           this.editRolesForm
         )
         if (result.meta.status !== 200) {
-          return this.$MSG.error('编辑角色信息失败！！！')
+          return this.$message.error('编辑角色信息失败！！！')
         }
 
-        this.$MSG.success('编辑角色信息成功')
+        this.$message.success('编辑角色信息成功')
         this.editRolesForm.roleName = ''
         this.editRolesForm.id = ''
         this.editRolesForm.roleDesc = ''
@@ -268,17 +268,17 @@ export default {
     async addRole () {
       this.$refs.addRolesRef.validate(async valid => {
         console.log(valid)
-        if (!valid) return this.$MSG.info('请根据提示输入指定参数！！！')
+        if (!valid) return this.$message.info('请根据提示输入指定参数！！！')
         const { data: result } = await this.$http.post(
           'roles',
           this.addRolesForm
         )
         console.log(result, 111111111111111)
         if (result.meta.status !== 201) {
-          return this.$MSG.error('添加角色失败！！！')
+          return this.$message.error('添加角色失败！！！')
         }
         this.roleList.push(result.data)
-        this.$MSG.success('添加角色成功')
+        this.$message.success('添加角色成功')
         this.addRolesForm.roleName = ''
         this.addRolesForm.roleDesc = ''
         this.addRolesDialogVisible = false
@@ -294,16 +294,16 @@ export default {
         .then(async () => {
           const { data: res } = await this.$http.delete('roles/' + role.id)
           if (res.meta.status !== 200) {
-            return this.$MSG.error('删除角色失败！！！')
+            return this.$message.error('删除角色失败！！！')
           }
-          this.$MSG({
+          this.$message({
             type: 'success',
             message: '删除成功!'
           })
           this.getRoleList()
         })
         .catch(() => {
-          this.$MSG({
+          this.$message({
             type: 'info',
             message: '已取消删除'
           })
@@ -314,7 +314,7 @@ export default {
       // 获取全部权限
       const { data: result } = await this.$http.get('rights/tree')
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取权限树失败！！')
+        return this.$message.error('获取权限树失败！！')
       }
       // 将获取到的权限数据保存到data
       this.allPermission = result.data
@@ -328,7 +328,7 @@ export default {
       const { data: result } = await this.$http.get('roles')
       console.log(result)
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取角色列表失败！！！')
+        return this.$message.error('获取角色列表失败！！！')
       }
       this.roleList = result.data
     },
@@ -343,12 +343,12 @@ export default {
             `roles/${role.id}/rights/${permission.id}`
           )
           console.log(result)
-          if (result.meta.status !== 200) return this.$MSG.error('删除失败！')
-          this.$MSG.info('已删除！')
+          if (result.meta.status !== 200) { return this.$message.error('删除失败！') }
+          this.$message.info('已删除！')
           role.children = result.data
         })
         .catch(e => {
-          if (confirm !== 'confirm') return this.$MSG.info('取消了删除！')
+          if (confirm !== 'confirm') return this.$message.info('取消了删除！')
         })
     },
     // 以递归的方式获取全部三级权限
@@ -375,9 +375,9 @@ export default {
           rids: checkKeysStr
         }
       )
-      if (result.meta.status !== 200) return this.$MSG.error('分配权限失败')
+      if (result.meta.status !== 200) return this.$message.error('分配权限失败')
       this.permisionSetDialogVisible = false
-      this.$MSG.success('分配权限成功')
+      this.$message.success('分配权限成功')
       this.getRoleList()
     }
   }

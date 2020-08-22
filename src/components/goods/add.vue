@@ -200,7 +200,7 @@ export default {
     async getCateList () {
       const { data: result } = await this.$http.get('categories')
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取商品分类数据失败')
+        return this.$message.error('获取商品分类数据失败')
       }
       console.log(result.data)
       this.catList = result.data
@@ -215,62 +215,56 @@ export default {
     beforeTabLeave (newActiveName, oldActiveName) {
       console.log(newActiveName, oldActiveName)
       if (this.activeIndex === '0' && this.addForm.goods_cat.length !== 3) {
-        this.$MSG.error('请先选择商品分类！')
+        this.$message.error('请先选择商品分类！')
         return false
       }
     },
     async tabClicked () {
       // console.log(this.activeIndex)
       // 访问动态参数面板
-      switch (this.activeIndex) {
-        case '1':
-          const { data: resultMany } = await this.$http.get(
-            `categories/${this.cateID}/attributes`,
-            {
-              params: {
-                sel: 'many'
-              }
+      if (this.activeIndex === '1') {
+        const { data: resultMany } = await this.$http.get(
+          `categories/${this.cateID}/attributes`,
+          {
+            params: {
+              sel: 'many'
             }
-          )
-          if (resultMany.meta.status !== 200) {
-            return this.$MSG.error('获取动态参数列表失败！')
           }
-          resultMany.data.forEach(item => {
-            item.attr_vals =
-              item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
-          })
-          console.log(resultMany.data)
-          this.manyTableData = resultMany.data
-          break
-        case '2':
-          const { data: resultOnly } = await this.$http.get(
-            `categories/${this.cateID}/attributes`,
-            {
-              params: {
-                sel: 'only'
-              }
+        )
+        if (resultMany.meta.status !== 200) {
+          return this.$message.error('获取动态参数列表失败！')
+        }
+        resultMany.data.forEach(item => {
+          item.attr_vals =
+            item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
+        })
+        console.log(resultMany.data)
+        this.manyTableData = resultMany.data
+      }
+      if (this.activeIndex === '2') {
+        const { data: resultOnly } = await this.$http.get(
+          `categories/${this.cateID}/attributes`,
+          {
+            params: {
+              sel: 'only'
             }
-          )
-          if (resultOnly.meta.status !== 200) {
-            return this.$MSG.error('获取属性列表失败！')
           }
-          // resultOnly.data.forEach(item => {
-          //   item.attr_vals =
-          //     item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
-          // })
-          console.log(resultOnly.data)
-          this.onlyTableData = resultOnly.data
-          break
-        default:
-          break
+        )
+        if (resultOnly.meta.status !== 200) {
+          return this.$message.error('获取属性列表失败！')
+        }
+        // resultOnly.data.forEach(item => {
+        //   item.attr_vals =
+        //     item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
+        // })
+        console.log(resultOnly.data)
+        this.onlyTableData = resultOnly.data
       }
     },
     // 文件列表移除文件时
     handleRemove (file, fileList) {
       const path = file.response.data.tmp_path
-      const index = this.addForm.pics.findIndex(x => {
-        x.pic === path
-      })
+      const index = this.addForm.pics.findIndex(x => x.pic === path)
       this.addForm.pics.splice(index, 1)
       console.log(file, fileList)
     },
@@ -291,7 +285,7 @@ export default {
       this.$refs.addFormRef.validate(valide => {
         isValide = valide
       })
-      if (!isValide) return this.$MSG.warning('请输入所需参数！')
+      if (!isValide) return this.$message.warning('请输入所需参数！')
       // 处理动态 参数
       this.manyTableData.forEach(item => {
         this.addForm.attrs.push({
@@ -312,9 +306,9 @@ export default {
       // 发起请求添加商品
       const { data: result } = await this.$http.post('goods', form)
       if (result.meta.status !== 201) {
-        return this.$MSG.error('添加商品失败！！！')
+        return this.$message.error('添加商品失败！！！')
       }
-      this.$MSG.success('添加商品失败成功')
+      this.$message.success('添加商品失败成功')
       this.$router.push('goods')
     }
   },

@@ -285,20 +285,20 @@ export default {
       this.deployUserInfo = user
       const { data: result } = await this.$http.get('roles')
       console.log(result)
-      if (result.meta.status !== 200) return this.$MSG.error('获取角色失败！！')
+      if (result.meta.status !== 200) { return this.$message.error('获取角色失败！！') }
       this.roleList = result.data
       this.setRoleDialogVisible = true
     },
     async saveDeployRoles () {
-      if (!this.select) return this.$MSG.info('请选择分配角色！！！')
+      if (!this.select) return this.$message.info('请选择分配角色！！！')
       const { data: result } = await this.$http.put(
         `users/${this.deployUserInfo.id}/role`,
         {
           rid: this.select
         }
       )
-      if (result.meta.status !== 200) return this.$MSG.error('分配角色失败')
-      this.$MSG.success('分配角色成功')
+      if (result.meta.status !== 200) return this.$message.error('分配角色失败')
+      this.$message.success('分配角色成功')
       this.getUserList()
       this.setRoleDialogVisible = false
     },
@@ -309,9 +309,9 @@ export default {
       )
       if (result.meta.status !== 200) {
         userInfo.mg_state = !userInfo.mg_state
-        return this.$MSG.error('更新用户状态失败')
+        return this.$message.error('更新用户状态失败')
       }
-      this.$MSG.success('更新成功')
+      this.$message.success('更新成功')
     },
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
@@ -326,7 +326,7 @@ export default {
         params: this.queryInfo
       })
       console.log(res)
-      if (res.meta.status !== 200) return this.$MSG.error(res.meta.msg)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.message)
       this.userList = res.data.users
       this.total = res.data.total
     },
@@ -344,18 +344,18 @@ export default {
         console.log(res)
         if (res.meta.status !== 201) {
           this.addUserCancelDialog()
-          return this.$MSG.error('添加用户失败！')
+          return this.$message.error('添加用户失败！')
         }
         // 关闭dialog
         this.addUserCancelDialog()
         // 重新获取用户列表
         this.getUserList()
-        return this.$MSG.success('添加用户成功！')
+        return this.$message.success('添加用户成功！')
       })
     },
     showEditDialog: async function (id) {
       const { data: res } = await this.$http.get('users/' + id)
-      if (res.meta.status !== 200) return this.$MSG.error('查询用户信息失败！')
+      if (res.meta.status !== 200) { return this.$message.error('查询用户信息失败！') }
       this.editUserForm = res.data
       this.editDialogVisible = true
     },
@@ -375,12 +375,12 @@ export default {
         )
 
         if (res.meta.status !== 200) {
-          return this.$MSG.error('更新用户信息失败！')
+          return this.$message.error('更新用户信息失败！')
         }
         this.editDialogVisible = false
         // 更新用户数据
         this.getUserList()
-        return this.$MSG.success('更新用户信息成功！')
+        return this.$message.success('更新用户信息成功！')
       })
     },
     removeUserById: function (user) {
@@ -395,15 +395,15 @@ export default {
       )
         .then(async () => {
           const { data: res } = await this.$http.delete('users/' + user.id)
-          if (res.meta.status !== 200) return this.$MSG.error('删除用户失败')
-          this.$MSG({
+          if (res.meta.status !== 200) { return this.$message.error('删除用户失败') }
+          this.$message({
             type: 'success',
             message: '删除成功!'
           })
           this.getUserList()
         })
         .catch(() => {
-          this.$MSG({
+          this.$message({
             type: 'info',
             message: '已取消删除'
           })

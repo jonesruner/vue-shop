@@ -284,7 +284,7 @@ export default {
         }
       )
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取参数列表失败！！！')
+        return this.$message.error('获取参数列表失败！！！')
       }
       // 将字符串分割成数组
       result.data.forEach(item => {
@@ -302,7 +302,7 @@ export default {
     async getCateList () {
       const { data: result } = await this.$http.get('categories')
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取商品分类列表失败！！！')
+        return this.$message.error('获取商品分类列表失败！！！')
       }
       this.cateList = result.data
       console.log(this.cateList)
@@ -326,10 +326,10 @@ export default {
           }
         )
         if (result.meta.status !== 201) {
-          return this.$MSG.error('添加参数失败!!!')
+          return this.$message.error('添加参数失败!!!')
         }
 
-        this.$MSG.success('添加参数成功')
+        this.$message.success('添加参数成功')
         this.getParams()
         this.addParamDialogVisible = false
       })
@@ -352,7 +352,7 @@ export default {
       )
 
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取参数数据失败!!!')
+        return this.$message.error('获取参数数据失败!!!')
       }
       this.editParamForm = result.data
       this.editParamDialogVisible = true
@@ -369,11 +369,11 @@ export default {
           }
         )
         if (result.meta.status !== 200) {
-          return this.$MSG.error('修改参数失败!!!')
+          return this.$message.error('修改参数失败!!!')
         }
         this.getParams()
         this.editParamDialogVisible = false
-        return this.$MSG.success('修改参数成功')
+        return this.$message.success('修改参数成功')
       })
     },
     // 根据id 删除参数
@@ -388,16 +388,16 @@ export default {
             `categories/${this.cateId}/attributes/${id}`
           )
           if (result.meta.status !== 200) {
-            return this.$MSG.error('删除参数失败!!!')
+            return this.$message.error('删除参数失败!!!')
           }
           this.getParams() // 重新获取参数列表
-          this.$MSG({
+          this.$message({
             type: 'success',
             message: '删除参数成功!'
           })
         })
         .catch(() => {
-          this.$MSG({
+          this.$message({
             type: 'info',
             message: '已取消删除'
           })
@@ -432,9 +432,9 @@ export default {
         }
       )
       if (result.meta.status !== 200) {
-        return this.$MSG.error('修改参数项失败!!!')
+        return this.$message.error('修改参数项失败!!!')
       }
-      this.$MSG.success('修改参数项成功')
+      this.$message.success('修改参数项成功')
     },
     handleClose (index, item) {
       item.attr_vals.splice(index, 1)

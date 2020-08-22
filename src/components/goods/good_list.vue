@@ -104,9 +104,9 @@ export default {
       })
       console.log(result)
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取商品列表失败!!!')
+        return this.$message.error('获取商品列表失败!!!')
       }
-      this.$MSG.success('获取商品列表成功')
+      this.$message.success('获取商品列表成功')
       this.goodsList = result.data.goods
       this.total = result.data.total
     },
@@ -131,19 +131,19 @@ export default {
           // 发送请求删除商品
           const { data: result } = await this.$http.delete(`goods/${id}`)
           if (result.meta.status !== 200) {
-            return this.$MSG({
+            return this.$message({
               type: 'error',
               message: '删除失败!'
             })
           }
           this.getGoodsList()
-          this.$MSG({
+          this.$message({
             type: 'success',
             message: '删除成功!'
           })
         })
         .catch(() => {
-          this.$MSG({
+          this.$message({
             type: 'info',
             message: '已取消删除'
           })

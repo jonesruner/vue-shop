@@ -177,7 +177,7 @@ export default {
         params: { type: '2' }
       })
       if (res.meta.status !== 200) {
-        return this.$MSG.error('获取父级分类数据失败！')
+        return this.$message.error('获取父级分类数据失败！')
       }
       this.parentCateList = res.data
       console.log(res.data)
@@ -192,9 +192,9 @@ export default {
           this.addCatForm
         )
         if (result.meta.status !== 201) {
-          return this.$MSG.error('添加分类失败！！！')
+          return this.$message.error('添加分类失败！！！')
         }
-        this.$MSG.success('添加分类成功')
+        this.$message.success('添加分类成功')
         this.getCateList()
         this.addCatDialogVisible = false
       })
@@ -224,7 +224,7 @@ export default {
         params: this.pageParams
       })
       if (result.meta.status !== 200) {
-        return this.$MSG.error('获取商品分类失败！！！')
+        return this.$message.error('获取商品分类失败！！！')
       }
       console.log(result)
       this.cateList = result.data.result

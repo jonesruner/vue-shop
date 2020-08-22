@@ -93,7 +93,7 @@ export default {
     async getMenuList () {
       const { data: result } = await this.$http.get('menus')
       // console.log(result)
-      if (result.meta.status !== 200) return this.$MSG.error(result.meta.msg)
+      if (result.meta.status !== 200) { return this.$message.error(result.meta.message) }
       this.menuList = result.data
     },
     saveActivePath (activePath) {

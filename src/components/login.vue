@@ -7,13 +7,22 @@
 
       <div class="login-footer">
         <!-- :model="form" -->
-        <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef"  >
+        <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef">
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" prefix-icon="el-input__icon el-icon-user-solid"> </el-input>
+            <el-input
+              v-model="loginForm.username"
+              prefix-icon="el-input__icon el-icon-user-solid"
+            >
+            </el-input>
           </el-form-item>
           <el-form-item prop="password">
             <!--  v-model="form.name" -->
-            <el-input v-model="loginForm.password" show-password prefix-icon="el-input__icon el-icon-lock" @keyup.enter.native="login"></el-input>
+            <el-input
+              v-model="loginForm.password"
+              show-password
+              prefix-icon="el-input__icon el-icon-lock"
+              @keyup.enter.native="login"
+            ></el-input>
           </el-form-item>
           <el-form-item class="oprator">
             <el-button type="primary" @click="login">登录</el-button>
@@ -55,8 +64,8 @@ export default {
         if (!valid) return
         const { data: result } = await this.$http.post('login', this.loginForm)
         console.log(result)
-        if (result.meta.status !== 200) return this.$MSG.error('登录失败')
-        this.$MSG.success('登录成功')
+        if (result.meta.status !== 200) return this.$message.error('登录失败')
+        this.$message.success('登录成功')
         // 1. 将登陆成功之后的token保存到客户端的sessionStorage中
         // 项目中除了登录之外的其他API接口，必须在登录之后才能访问
         // token只能够在当前网站打开期间生效，所以将token保存在sessionStorage中
@@ -80,9 +89,9 @@ export default {
   top: 50%;
   left: 50%;
   margin-top: -150px;
-  margin-left: -200PX;
-  width: 380PX;
-  height: 270PX;
+  margin-left: -200px;
+  width: 380px;
+  height: 270px;
   box-shadow: 0px 0px 5px white;
   background-color: white;
   padding: 10px;
@@ -110,12 +119,12 @@ export default {
     }
   }
   .login-footer {
-     position: absolute;
-     width: 380PX;
-     bottom: 10px;
-     .oprator {
-        text-align: right;
-     }
+    position: absolute;
+    width: 380px;
+    bottom: 10px;
+    .oprator {
+      text-align: right;
+    }
   }
 }
 </style>

@@ -171,7 +171,9 @@ export default {
       const { data: result } = await this.$http.get('orders', {
         params: this.queryInfo
       })
-      if (result.meta.status !== 200) { return this.$MSG.error('获取订单列表数据失败！') }
+      if (result.meta.status !== 200) {
+        return this.$message.error('获取订单列表数据失败！')
+      }
 
       this.total = result.data.total
       this.orderList = result.data.goods
@@ -184,7 +186,9 @@ export default {
     },
     async showProgressDialog (item) {
       const { data: result } = await this.$http.get('/kuaidi/1106975712662')
-      if (result.meta.status !== 200) { return this.$MSG.error('获取物流信息失败！！！') }
+      if (result.meta.status !== 200) {
+        return this.$message.error('获取物流信息失败！！！')
+      }
       this.progressInfo = result.data
       this.progressDialogVisible = true
     },
