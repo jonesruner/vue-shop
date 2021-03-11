@@ -15,7 +15,8 @@ import TreeTable from 'vue-table-with-tree-grid'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import axios from 'axios'
-axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+// axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+axios.defaults.baseURL = 'http://timemeetyou.com:8889/api/private/v1/'
 // 在request 拦截器中，展示进度条NProgress.start
 axios.interceptors.request.use(config => {
   // 为请求头添加token

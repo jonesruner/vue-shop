@@ -35,7 +35,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       loginForm: {
         username: 'admin',
@@ -54,11 +54,11 @@ export default {
     }
   },
   methods: {
-    resetLoginForm: function () {
+    resetLoginForm: function() {
       console.log(this)
       this.$refs.loginFormRef.resetFields()
     },
-    login () {
+    login() {
       this.$refs.loginFormRef.validate(async valid => {
         console.log(valid)
         if (!valid) return

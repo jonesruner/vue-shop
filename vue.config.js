@@ -1,5 +1,7 @@
 // 修改默认 Webpack 配置
 module.exports = {
+  publicPath : "./",
+
   // 修改入口文件配置
   chainWebpack: config => {
     //   发布
@@ -34,5 +36,6 @@ module.exports = {
         .clear()
         .add('./src/main-dev.js')
     })
+
   }
 }
