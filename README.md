@@ -1,29 +1,31 @@
 # vueshop
 
-<img src="./img/home.png">
+
+![用户列表图片](./img/home.png) 
+![角色管理图片](./img/role.png) 
 
 ## Project setup
 
 ```
-yarn install
+npm install
 ```
 
 ### Compiles and hot-reloads for development
 
 ```
-yarn serve
+npm serve
 ```
 
 ### Compiles and minifies for production
 
 ```
-yarn build
+npm build
 ```
 
 ### Lints and fixes files
 
 ```
-yarn lint
+npm lint
 ```
 
 ### Customize configuration
